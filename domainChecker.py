@@ -1,26 +1,40 @@
 import requests
 
-def check_single_domain(domain):
-    response = requests.get(domain)
-    status_code = response.status_code
-    print(f"{domain} - Status Code: {status_code}")
+def check_status_code(domain):
+    try:
+        response = requests.get(f"https://{domain}")
+        print(f"{domain} -- Status code : {response.status_code}")
+        print()
+    except requests.exceptions.RequestException as e:
+        print(f"{domain} -- Error: {e}")
 
-def check_domains_file(filename):
-    with open(filename, 'r') as f:
-        for line in f:
-            domain = line.strip()
-            check_single_domain(domain)
 
-# Menu
-print("\n1. Check status code for a single domain")
-print("2. Check status code for multiple domains in a file")
-choice = input("\nEnter your choice (1 or 2): ")
+def check_multiple_domains(file_path):
+    with open(file_path, 'r') as f:
+        domains = f.read().splitlines()
+        for domain in domains:
+            check_status_code(domain)
 
-if choice == '1':
-    domain = input("Enter the domain name: ")
-    check_single_domain(domain)
-elif choice == '2':
-    filename = input("Enter the name of the file containing the domains: ")
-    check_domains_file(filename)
-else:
-    print("Invalid choice. Please enter 1 or 2 .")
+def main():
+    print("\n*** Welcome to the Domain Status Checker ***\n")
+    while True:
+        print("Please choose one of the following options:")
+        print("1. Check status code for a singe domain")
+        print("2. Check status code for multiple domains in a file")
+        print("3. Exit")
+        choice = input("\nEnter your choice (1, 2, 3): ")
+
+        if choice == "1":
+            domain = input("\nEnter the domain name: ")
+            check_status_code(domain)
+        elif choice == "2":
+            file_path = input("Enter the file path: ")
+            check_multiple_domains(file_path)
+        elif choice == "3":
+            print("\nThanks you fo using the Domain Status Checker By:Anubis!")
+            break
+        else:
+            print("\nInvalid choice, Please choose a valid option")
+            continue
+if __name__ == '__main__':
+    main()
