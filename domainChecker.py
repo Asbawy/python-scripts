@@ -1,6 +1,8 @@
 import requests
 import sys
 import os.path
+from termcolor import colored
+
 
 def validate_domain_name(domain_name):
     if ' ' in domain_name:
@@ -14,10 +16,10 @@ def validate_domain_name(domain_name):
 def check_status_code(domain):
     try:
         response = requests.get(f"https://{domain}")
-        print(f"{domain} -- Status code : {response.status_code}")
+        print(colored(f"{domain} -- Status code : {response.status_code}", "green"))
     except requests.exceptions.RequestException as e:
-        print(f"{domain} -- Error: {e}")
-        print("Please check the domain name and try again.")
+        print(colored(f"{domain} -- Error: {e}", "red"))
+        print(colored("Please check the domain name and try again.", "red"))
 
 
 def check_multiple_domains(file_path):
@@ -25,7 +27,7 @@ def check_multiple_domains(file_path):
         with open(file_path, 'r') as f:
             domains = f.read().splitlines()
     except FileNotFoundError:
-            print(f"Error: Could not find the file '{file_path}'")
+            print(colored(f"Error: Could not find the file '{file_path}'", "red"))
             return
     
     for domain in domains:
@@ -33,14 +35,15 @@ def check_multiple_domains(file_path):
 
     sys.exit()
 
+
 def main():
-    print("*** Welcome to the Domain Status Checker ***\n")
+    print(colored("*** Welcome to the Domain Status Checker ***\n", "cyan"))
 
     while True:
         print("Please choose one of the following options:")
-        print("1. Check status code for a single domain")
-        print("2. Check status code for multiple domains in a file")
-        print("3. Exit")
+        print(colored("1. Check status code for a single domain", "yellow"))
+        print(colored("2. Check status code for multiple domains in a file", "yellow"))
+        print(colored("3. Exit", "yellow"))
 
         choice = input("\nEnter your choice (1, 2, 3): ")
 
@@ -50,7 +53,7 @@ def main():
                 if validate_domain_name(domain):
                     break
                 else:
-                    print("Invalid domain name. Please try again.")
+                    print(colored("Invalid domain name. Please try again.", "red"))
 
             check_status_code(domain)
             sys.exit()
@@ -60,15 +63,16 @@ def main():
                 if os.path.isfile(file_path):
                     break
                 else:
-                    print("Invalid file path. Please try again.")
+                    print(colored("Invalid file path. Please try again.", "red"))
 
             check_multiple_domains(file_path)
         elif choice == "3":
-            print("\nThank you for using the Domain Status Checker By:Anubis!")
+            print(colored("\nThank you for using the Domain Status Checker By:Anubis!", "cyan"))
             sys.exit()
         else:
-            print("\nInvalid choice. Please choose a valid option.\n")
+            print(colored("\nInvalid choice. Please choose a valid option.\n", "red"))
             continue
+
 
 if __name__ == '__main__':
     main()
