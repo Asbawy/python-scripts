@@ -1,5 +1,6 @@
 def get_error_message(error_code):
-    error_codes = {
+    """Returns the HTTP status message for the given error code. """
+    HTTP_STATUS_CODES = {
         100: 'Continue',
         101: 'Switching Protocols',
         102: 'Processing',
@@ -64,16 +65,16 @@ def get_error_message(error_code):
         511: 'Network Authentication Required'
     }
 
-    if error_code in error_codes:
-        return f"Error {error_code}: {error_codes[error_code]}"
+    if error_code in HTTP_STATUS_CODES:
+        return f"Error {error_code}: {HTTP_STATUS_CODES[error_code]}"
     else:
-        return f"Unkown error: {error_code}"
+        return f"Unknown error: {error_code}"
     
 error_code = int(input("Enter the web error code: "))
 error_message = get_error_message(error_code)
 
 print("\n" + "="*40)
-print("              WEB ERROR MESSAGE")
-print("                 by:Anubis-369")
+print("          WEB ERROR MESSAGE")
+print("             by:Anubis-369")
 print("="*40 + "\n")
 print(f"The error message for error code {error_code} is:\n{error_message}\n")
