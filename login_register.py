@@ -1,4 +1,6 @@
 import base64 
+import json
+import os 
 
 
 def register(username, password):
@@ -6,31 +8,49 @@ def register(username, password):
     encoded_username = base64.b64encode(username.encode('utf-8')).decode('utf-8')
     encoded_password = base64.b64encode(password.encode('utf-8')).decode('utf-8')
 
-    # Write the encoded username and password to a File 
+    # Check if the users.json exist
+    if os.path.exists('users.json'):
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+    else:
+        users = {}
 
-    with open('users.txt', 'r') as f:
-        users = [line.strip() for line in f]
-
-    for user in users:
-        if user.split(',')[0] == encoded_username:
-            print('Username already exists')
+    # Check if the username already Exist
+    for user_id, user in users.items():
+        if user['username'] == encoded_username:
+            print("Username already exists.")
             return
-    
-    with open('users.txt', 'a') as f:
-        f.write(f'{encoded_username},{encoded_password}')
-    print('Registration successful.')
+        
+    # Generate new user ID
+    user_id = str(len(users) + 1)
+
+    # Add new user to the dictionary of Users
+    users[user_id] = {'username': encoded_username, 'password': encoded_password}
+
+    # Write the updated users dictionary to the JSON File
+    with open('users.json', 'w') as f:
+        json.dump(users, f)
+
+    print(f'Registration successful. Your user ID is {user_id}.')
 
 
 def login(username, password):
-    # Read the encoded username and password from File
+    # Check if the users.json exist
+    if os.path.exists('users.json'):
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+    else:
+        print('No users found')
+        return
+    
+    # Check if the username and password match any User
+    for user_id, user in users.items():
+        if user['username'] == base64.b64encode(username.encode('utf-8')).decode('utf-8') and user['password'] == base64.b64encode(password.encode('utf-8')).decode('utf-8'):
+            print(f'Login successful. Welcome, user {user_id}')
+            return
+    
+    print('Invalid username or password.')
 
-    with open("users.txt", "r") as f:
-        for line in f:
-            encoded_username, encoded_password = line.strip().split(',')
-            if encoded_username == base64.b64encode(username.encode('utf-8')).decode('utf-8') and encoded_password == base64.b64encode(password.encode('utf-8')).decode('utf-8'):
-                print("Login successful")
-                return
-    print("Invalid username or password")
 
 def main():
     while True:
