@@ -19,6 +19,7 @@
 python txt2hash.py -t "Your text here" -T sha256
 
 #or
+
 chmod +x txt2hash.py
 ./txt2hash.py -t "Your text here" -T sha256
 ```

@@ -35,7 +35,6 @@ def check_multiple_domains(file_path):
 
     sys.exit()
 
-
 def main():
     print(colored("*** Welcome to the Domain Status Checker ***\n", "cyan"))
 
